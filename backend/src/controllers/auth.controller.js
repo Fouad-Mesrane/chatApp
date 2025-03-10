@@ -49,18 +49,94 @@ export const signup = async (req, res) => {
     }
   } catch (error) {
     console.log("error in signup controller", error.message);
-    res
-      .status(500)
-      .json({
-        error: error.message,
-        status: false,
-        message: "Internal Server Error",
-      });
+    res.status(500).json({
+      error: error.message,
+      status: false,
+      message: "Internal Server Error",
+    });
   }
 };
-export const login = (req, res) => {
-  res.send("signup");
+// login
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ error: "Invalid credentials", status: false });
+    }
+
+    const isMatch = bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res
+        .status(400)
+        .json({ error: "Invalid credentials", status: false });
+    }
+
+    // generate a token
+    generateToken(user._id, res);
+
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      message: "User logged in",
+      status: true,
+    });
+  } catch (error) {
+    console.log("error in login controller", error.message);
+    res.status(500).json({
+      error: error.message,
+      status: false,
+      message: "Internal Server Error",
+    });
+  }
 };
-export const logout = (req, res) => {
-  res.send("signup");
+export const logout = async (req, res) => {
+  try {
+    res.cookie("jwt", "", { maxAge: 0 });
+    res.status(200).json({ message: "User logged out", status: true });
+  } catch (error) {
+    console.log("error in logout controller", error.message);
+    res.status(500).json({
+      error: error.message,
+      status: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+
+export const updateProfile = async (req, res) => {
+  const { name, email } = req.body;
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ error: "User not found", status: false });
+    }
+    user.name = name || user.name;
+    user.email = email || user.email;
+    await user.save();
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      message: "User profile updated",
+      status: true,
+    });
+  } catch (error) {
+    console.log("error in updateProfile controller", error.message);
+    res.status(500).json({
+      error: error.message,
+      status: false,
+      message: "Internal Server Error",
+    });
+  }
 };
