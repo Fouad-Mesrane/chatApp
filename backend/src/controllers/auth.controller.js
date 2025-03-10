@@ -112,31 +112,5 @@ export const logout = async (req, res) => {
 
 
 export const updateProfile = async (req, res) => {
-  const { name, email } = req.body;
-  try {
-    const user = await User.findById(req.user.id);
-    if (!user) {
-      return res
-        .status(404)
-        .json({ error: "User not found", status: false });
-    }
-    user.name = name || user.name;
-    user.email = email || user.email;
-    await user.save();
-    res.status(200).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      avatar: user.avatar,
-      message: "User profile updated",
-      status: true,
-    });
-  } catch (error) {
-    console.log("error in updateProfile controller", error.message);
-    res.status(500).json({
-      error: error.message,
-      status: false,
-      message: "Internal Server Error",
-    });
-  }
+ 
 };
