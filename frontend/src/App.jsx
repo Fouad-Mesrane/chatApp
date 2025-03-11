@@ -1,13 +1,6 @@
-
-
 function App() {
-
-
-  return (
-    <>
-  
-    </>
-  )
+  return <>Hello
+  <button className="btn ">Medium</button></>;
 }
 
-export default App
+export default App;
