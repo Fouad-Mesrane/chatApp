@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import AuthImagePattern from "../components/AuthImagePattern.jsx";
+import { signupSchema } from "../lib/yup.js";
+import toast from "react-hot-toast";
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -22,10 +24,25 @@ const SignupPage = () => {
 
   const { signup, isSigningUp } = useAuthStore();
 
-  const validateForm = () => {};
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const validateForm = async () => {
+    try {
+      await signupSchema.validate(formData);
+      return true;
+    } catch (err) {
+      toast.error(err.message);
+      return false;
+    }
   };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const isValid = await validateForm();
+
+    if (isValid) {
+      signup(formData);
+    }
+  };
+  
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
@@ -140,9 +157,11 @@ const SignupPage = () => {
         </div>
       </div>
 
-
       {/* right */}
-      <AuthImagePattern title = "Join our community" subtitle = "Connect with friends and families, share your thoughts, and explore a world of possibilities."/>
+      <AuthImagePattern
+        title="Join our community"
+        subtitle="Connect with friends and families, share your thoughts, and explore a world of possibilities."
+      />
     </div>
   );
 };

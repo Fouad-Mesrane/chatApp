@@ -42,7 +42,7 @@ export const signup = async (req, res) => {
         name: newUser.name,
         email: newUser.email,
         avatar: newUser.avatar,
-        message: "User created",
+        message: "User created successfully",
         status: true,
       });
     } else {
