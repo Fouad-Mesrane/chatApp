@@ -97,10 +97,12 @@ export const login = async (req, res) => {
     });
   }
 };
+
+// logout
 export const logout = async (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });
-    res.status(200).json({ message: "User logged out", status: true });
+    res.status(200).json({ message: "User logged out successfully", status: true });
   } catch (error) {
     console.log("error in logout controller", error.message);
     res.status(500).json({
@@ -111,6 +113,8 @@ export const logout = async (req, res) => {
   }
 };
 
+
+// profile update
 export const updateProfile = async (req, res) => {
   try {
     const { avatar } = req.body;
