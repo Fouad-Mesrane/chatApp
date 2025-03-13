@@ -32,7 +32,7 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = await validateForm();
-    console.log(isValid)
+  
     if (isValid) {
       login(formData);
     }

@@ -67,6 +67,8 @@ export const signup = async (req, res) => {
 // login
 export const login = async (req, res) => {
   const { email, password } = req.body;
+
+  console.log(email,password)
   try {
     const user = await User.findOne({ email });
 
@@ -75,9 +77,9 @@ export const login = async (req, res) => {
         .status(400)
         .json({ error: "Invalid credentials", status: false });
     }
-
-    const isMatch = bcrypt.compare(password, user.password);
-
+console.log(user.password)
+    const isMatch = await bcrypt.compare(password, user.password);
+console.log(isMatch)
     if (!isMatch) {
       return res
         .status(400)
