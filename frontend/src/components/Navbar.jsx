@@ -27,7 +27,7 @@ const Navbar = () => {
             className="flex items-center gap-2 hover:opacity-80 transition-all"
           >
             <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
-              <MessageSquare className="w-5 " />
+              <MessageSquare className="w-5 text-white" />
             </div>
             <h1 className="text-lg font-bold">Chatly</h1>
           </Link>
