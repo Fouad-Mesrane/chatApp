@@ -3,6 +3,13 @@ import bcrypt from "bcryptjs";
 import validator from "validator";
 import { generateToken } from "../lib/utils.js";
 import cloudinary from "../lib/cloudinary.js";
+
+
+
+
+
+
+
 export const signup = async (req, res) => {
   const { name, email, password } = req.body;
   try {
