@@ -34,7 +34,7 @@ const Navbar = () => {
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
-              defaultChecked
+              
               className="toggle"
               onChange={handleTheme}
               checked={theme === "dark" ? true : false}
