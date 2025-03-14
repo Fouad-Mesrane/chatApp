@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import SidebarSkeleton from "./skeletons/SidebarSekeleton";
 import { Users } from "lucide-react";
@@ -7,11 +7,16 @@ import { useAuthStore } from "../store/useAuthStore";
 const Sidebar = () => {
   const { getUsers, users, setSelectedUser, isUsersLoading, selectedUser } =
     useChatStore();
-  const {onlineUsers} = useAuthStore();
+  const { onlineUsers } = useAuthStore();
+  const [showOnlineOnly, setShowOnlineOnly] = useState(false);
 
   useEffect(() => {
     getUsers();
   }, [getUsers]);
+
+  const filteredUsers = showOnlineOnly
+    ? users.filter((user) => onlineUsers.includes(user._id))
+    : users;
 
   if (isUsersLoading) return <SidebarSkeleton />;
   return (
@@ -23,8 +28,16 @@ const Sidebar = () => {
 
       {/* todo : Online filter toggle */}
 
+      <div className="mt-3 hidden lg:flex items-center gap-2">
+        <label className="cursor-pointer flex items-center gap-2"> 
+          <input type="checkbox" checked={showOnlineOnly} className="checkbox checkbox-sm" onChange={(e) => setShowOnlineOnly(e.target.checked)}/>
+          <span className="text-sm">Show online only</span>
+        </label>
+        <span className="text-xs text-zinc-500">({onlineUsers.length-1} online)</span>
+      </div>
+
       <div className="overflow-y-auto w-full py-3">
-        {users.map((user) => {
+        {filteredUsers.map((user) => {
           return (
             <button
               key={user._id}
