@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useChatStore } from "../store/useChatStore";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
@@ -7,12 +7,31 @@ import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
 
 const ChatContainer = () => {
-  const { getMessages, messages, isMessagesLoading, selectedUser } =
-    useChatStore();
+  const {
+    getMessages,
+    messages,
+    isMessagesLoading,
+    selectedUser,
+    listenToMessages,
+    unlistenFromMessages,
+  } = useChatStore();
   const { authUser } = useAuthStore();
+const messageEndRef = useRef()
+
   useEffect(() => {
     getMessages(selectedUser._id);
-  }, [getMessages, selectedUser._id]);
+    listenToMessages();
+
+    return () => unlistenFromMessages();
+  }, [getMessages, selectedUser._id, listenToMessages]);
+
+useEffect(() => {
+   
+if (messageEndRef.current && messages) {
+  messageEndRef.current.scrollIntoView({behavior : "smooth"})
+}
+
+}, [messages])
 
   if (isMessagesLoading) {
     return (
@@ -33,6 +52,7 @@ const ChatContainer = () => {
             className={`chat ${
               message.senderId === authUser._id ? "chat-end" : "chat-start"
             }`}
+            ref={messageEndRef}
           >
             <div className="chat-image avatar">
               <div className="size-10 rounded-full border">
@@ -60,9 +80,7 @@ const ChatContainer = () => {
                 />
               )}
 
-              {message.text && (
-                <p>{message.text}</p>
-              )}
+              {message.text && <p>{message.text}</p>}
             </div>
           </div>
         ))}
