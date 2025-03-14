@@ -26,7 +26,7 @@ export const signup = async (req, res) => {
     }
 
     if (!validator.isEmail(email)) {
-      return res.status(400).json({ error: "Invalid email" });
+      return res.status(400).json({ error: "Invalid email format" });
     }
 
     const userExists = await User.findOne({ email });
