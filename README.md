@@ -3,6 +3,8 @@
 
 ChatApp is a full-stack real-time chat application built with Node.js, Express, MongoDB, and React.
 
+Live : https://chatapp-cp6m.onrender.com
+
 ## 🚀 Features
 
 - User authentication (login/register)
